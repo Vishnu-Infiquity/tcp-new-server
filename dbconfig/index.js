@@ -1,10 +1,10 @@
 const Pool = require('pg').Pool
 const pool = new Pool({
-    user: process.env.user,
-    host: process.env.host,
-    database: process.env.database,
-    password: process.env.password,
-    port: process.env.dbport
+    user: 'postgres',
+    host: '34.100.209.48',
+    database: 'airport-iot-db',
+    password: 'gmr-infiquity',
+    port: '5432'
 })
 
 module.exports = {
