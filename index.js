@@ -103,6 +103,11 @@ const app = express();
 app.use(cors())
 app.use(express.json());
 
+let FirstpowerValue=0;
+let LastpowerValue=0;
+
+let chargerStatus = 3;
+
 app.get('/api/startCharging/CHARGEON', async (req, res, next) => {
   console.log(1111)
   Status = true;
@@ -110,6 +115,7 @@ app.get('/api/startCharging/CHARGEON', async (req, res, next) => {
   //const input = '{0,0,0,0,0,0,0,0,100,100,100,100,0,0,0,0,0,0,0,0,23587,23583,23590,23588,0,0,0,0,710,2690,1,0,4996,0}';//data.toString().trim();
     
   //const updateIOT = updateIOTStatus(input)
+  chargerStatus= 1;
   res.send("CHARGE ON")
 });
 
@@ -117,6 +123,7 @@ app.get('/api/startCharging/CHARGEOFF', async (req, res, next) => {
   console.log(1111)
   Status = false;
   console.log(Status)
+  chargerStatus= 2;
   res.send("CHARGE OFF")
 });
 
@@ -214,14 +221,23 @@ try {
     console.log(last6);
     const powerConsumed = last6[0];
     console.log(`powerConsumed: ${powerConsumed}`)
-    
-    if(powerConsumed > 0) {
-      const getCharger = await db.pool.query(`SELECT * from public."IoT" WHERE "IOTID"='${IoTID}'`)
-      console.log('IOT form DB:')
-      console.log(getCharger.rows)
-      const chargerId = getCharger.rows[0].ChargerId;
-      console.log(`charger id: ${chargerId}`)
-      const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = '${powerConsumed}' WHERE "ChargerId"= ${chargerId}`)
+
+    if(chargerStatus == 1){
+      FirstpowerValue = powerConsumed;
+    } else if(chargerStatus == 2){
+      LastpowerValue = powerConsumed;
+      chargerStatus = 3;
+      const finalValue = LastpowerValue -  FirstpowerValue
+
+      if(finalValue > 0) {
+        const getCharger = await db.pool.query(`SELECT * from public."IoT" WHERE "IOTID"='${IoTID}'`)
+        console.log('IOT form DB:')
+        console.log(getCharger.rows)
+        const chargerId = getCharger.rows[0].ChargerId;
+        console.log(`charger id: ${chargerId}`)
+        const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = '${finalValue}' WHERE "ChargerId"= ${chargerId}`)
+      }
+
     }
     
     console.log(withoutFirstAndLast)
