@@ -211,6 +211,8 @@ try {
   
   //if(iotDataCount == 23 || iotDataCount == 34) {
     /*if(iotDataCount == 1) {*/
+    console.log(`chargerStatus:${chargerStatus}`);
+
     const dataNew = String(input);
     const withoutFirstAndLast = dataNew.slice(1, -1);
     const split_string = withoutFirstAndLast.split(",");
