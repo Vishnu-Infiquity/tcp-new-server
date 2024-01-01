@@ -225,6 +225,7 @@ try {
 
     if(powerConsumed > 0){
       if(chargerStatus == 1){
+        chargerStatus = 3;
         FirstpowerValue = powerConsumed;
         console.log(`FirstpowerValue: ${FirstpowerValue}`)
       } else if(chargerStatus == 2){
