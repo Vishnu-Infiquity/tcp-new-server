@@ -226,11 +226,13 @@ try {
     if(powerConsumed > 0){
       if(chargerStatus == 1){
         FirstpowerValue = powerConsumed;
+        console.log(`FirstpowerValue: ${FirstpowerValue}`)
       } else if(chargerStatus == 2){
         LastpowerValue = powerConsumed;
+        console.log(`LastpowerValue: ${LastpowerValue}`)
         chargerStatus = 3;
         const finalValue = LastpowerValue -  FirstpowerValue
-
+        console.log(`Final Value: ${finalValue}`)
         if(finalValue > 0) {
           const getCharger = await db.pool.query(`SELECT * from public."IoT" WHERE "IOTID"='${IoTID}'`)
           console.log('IOT form DB:')
@@ -240,7 +242,14 @@ try {
           const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = '${finalValue}' WHERE "ChargerId"= ${chargerId}`)
         }
       }
+
+      console.log(`FirstpowerValue: ${FirstpowerValue}`)
+      console.log(`LastpowerValue: ${LastpowerValue}`)
+      console.log(`Final Value: ${finalValue}`)
+
     }
+
+    
     
     console.log(withoutFirstAndLast)
     console.log(split_string)
