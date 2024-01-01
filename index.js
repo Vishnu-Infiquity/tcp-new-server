@@ -217,6 +217,8 @@ try {
     
     if(powerConsumed > 0) {
       const getCharger = await db.pool.query(`SELECT * from public."IoT" WHERE "IOTID"='${IoTID}'`)
+      console.log('IOT form DB:')
+      console.log(getCharger.rows)
       const chargerId = getCharger.rows[0].chargerId;
       console.log(`charger id: ${chargerId}`)
       const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = '${powerConsumed}' WHERE "ChargerId"= ${chargerId}`)
