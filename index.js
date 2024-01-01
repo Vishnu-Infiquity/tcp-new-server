@@ -106,8 +106,10 @@ app.use(cors())
 app.use(express.json());
 
 let chargerStatus = 3;
+let id = 0;
 
-app.get('/api/startCharging/CHARGEON', async (req, res, next) => {
+app.get('/api/startCharging/CHARGEON/:id', async (req, res, next) => {
+  id = req.params;
   console.log(1111)
   Status = true;
   console.log(Status)
@@ -118,7 +120,8 @@ app.get('/api/startCharging/CHARGEON', async (req, res, next) => {
   res.send("CHARGE ON")
 });
 
-app.get('/api/startCharging/CHARGEOFF', async (req, res, next) => {
+app.get('/api/startCharging/CHARGEOFF/:id', async (req, res, next) => {
+  id = req.params;
   console.log(2222)
   Status = false;
   console.log(Status)
@@ -213,6 +216,8 @@ try {
     /*if(iotDataCount == 1) {*/
     console.log(`chargerStatus:${chargerStatus}`);
 
+    console.log(`BookingId:${id}`);
+
     const dataNew = String(input);
     const withoutFirstAndLast = dataNew.slice(1, -1);
     const split_string = withoutFirstAndLast.split(",");
@@ -240,7 +245,7 @@ try {
           console.log(getCharger.rows)
           const chargerId = getCharger.rows[0].ChargerId;
           console.log(`charger id: ${chargerId}`)
-          const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = '${finalValue}' WHERE "ChargerId"= ${chargerId}`)
+          const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = '${finalValue}' WHERE "ChargerId"= ${chargerId} AND "Id" = ${id}`)
         }
       }
 
