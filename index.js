@@ -239,7 +239,7 @@ try {
     const dataToSave = await data.save();
     console.log(dataToSave)
     console.log('Success')
-    
+
 
     const last6 = split_string.slice(-6);
     console.log(last6);
@@ -264,7 +264,7 @@ try {
           const chargerId = getCharger.rows[0].ChargerId;
           console.log(`charger id: ${chargerId}`)
           //const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = '${finalValue}' WHERE "ChargerId"= ${chargerId} AND "Id" = ${id}`)
-          const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = '${finalValue}' WHERE "Id" = ${BookingId}`)
+          const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = '${finalValue}', "ChargingStatus" = 'Completed' WHERE "Id" = ${BookingId}`)
         }
       }
 
