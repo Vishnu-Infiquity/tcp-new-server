@@ -217,7 +217,9 @@ try {
     console.log(`chargerStatus:${chargerStatus}`);
 
     console.log(`BookingId:${id}`);
-    const BookingId = Object.values(id);
+    const BookingIdArray = Object.values(id);
+    console.log(BookingIdArray[0]);
+    const BookingId = parseInt(BookingIdArray[0]);
     console.log(BookingId);
 
     const dataNew = String(input);
