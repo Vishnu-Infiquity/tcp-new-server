@@ -216,8 +216,8 @@ try {
     /*if(iotDataCount == 1) {*/
     console.log(`chargerStatus:${chargerStatus}`);
 
-    console.log(`BookingId:${id}`);
-    console.log(id);
+    console.log(`BookingId:${id.id}`);
+    const BookingId = id.id;
 
     const dataNew = String(input);
     const withoutFirstAndLast = dataNew.slice(1, -1);
@@ -247,7 +247,7 @@ try {
           const chargerId = getCharger.rows[0].ChargerId;
           console.log(`charger id: ${chargerId}`)
           //const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = '${finalValue}' WHERE "ChargerId"= ${chargerId} AND "Id" = ${id}`)
-          const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = '${finalValue}' WHERE "Id" = ${id}`)
+          const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = '${finalValue}' WHERE "Id" = ${BookingId}`)
         }
       }
 
