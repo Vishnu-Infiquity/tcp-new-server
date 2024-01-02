@@ -218,14 +218,28 @@ try {
 
     console.log(`BookingId:${id}`);
     const BookingIdArray = Object.values(id);
-    console.log(BookingIdArray[0]);
-    const BookingId = parseInt(BookingIdArray[0]);
+    //console.log(BookingIdArray[0]);
+    const BookingId = BookingIdArray[0];
     console.log(BookingId);
 
     const dataNew = String(input);
     const withoutFirstAndLast = dataNew.slice(1, -1);
     const split_string = withoutFirstAndLast.split(",");
     const IoTID = split_string[0];
+
+    const data = new IoTModel({
+      IOTID: IoTID,
+      data: input,
+      remoteAddress: remoteAddress,
+      remotePort: remotePort
+    })
+  
+    console.log(data)
+  
+    const dataToSave = await data.save();
+    console.log(dataToSave)
+    console.log('Success')
+    
 
     const last6 = split_string.slice(-6);
     console.log(last6);
@@ -260,27 +274,9 @@ try {
 
     }
 
-    
-    
     console.log(withoutFirstAndLast)
     console.log(split_string)
-    console.log(IoTID)
-
-      const data = new IoTModel({
-        IOTID: IoTID,
-        data: input,
-        remoteAddress: remoteAddress,
-        remotePort: remotePort
-    })
-    
-    console.log(data)
-    
-      const dataToSave = await data.save();
-      console.log(dataToSave)
-      console.log('Success')
-  /*} else {
-    console.log(input)
-  }*/
+    console.log(IoTID);
 }
 catch (error) {
     console.log(error)
