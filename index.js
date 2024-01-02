@@ -109,7 +109,7 @@ let chargerStatus = 3;
 let id = 0;
 
 app.get('/api/startCharging/CHARGEON/:id', async (req, res, next) => {
-  id = req.params;
+  const { id } = req.params;
   console.log(1111)
   Status = true;
   console.log(Status)
@@ -121,7 +121,7 @@ app.get('/api/startCharging/CHARGEON/:id', async (req, res, next) => {
 });
 
 app.get('/api/startCharging/CHARGEOFF/:id', async (req, res, next) => {
-  id = req.params;
+  const { id } = req.params;
   console.log(2222)
   Status = false;
   console.log(Status)
@@ -216,9 +216,10 @@ try {
     /*if(iotDataCount == 1) {*/
     console.log(`chargerStatus:${chargerStatus}`);
 
-    console.log(`BookingId:${id.id}`);
-    const BookingId = id.id;
-
+    console.log(`BookingId:${id}`);
+    const BookingId = id;
+    console.log(BookingId);
+    
     const dataNew = String(input);
     const withoutFirstAndLast = dataNew.slice(1, -1);
     const split_string = withoutFirstAndLast.split(",");
