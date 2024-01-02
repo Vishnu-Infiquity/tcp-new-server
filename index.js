@@ -217,6 +217,7 @@ try {
     console.log(`chargerStatus:${chargerStatus}`);
 
     console.log(`BookingId:${id}`);
+    console.log(id);
 
     const dataNew = String(input);
     const withoutFirstAndLast = dataNew.slice(1, -1);
