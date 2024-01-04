@@ -264,7 +264,7 @@ try {
           const chargerId = getCharger.rows[0].ChargerId;
           console.log(`charger id: ${chargerId}`)
           //const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = '${finalValue}' WHERE "ChargerId"= ${chargerId} AND "Id" = ${id}`)
-          const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Completed' WHERE "Id" = ${BookingId}`)
+          const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = '${finalValue}', "ChargingStatus" = 'Completed' WHERE "Id" = ${BookingId}`)
         }
       }
 
