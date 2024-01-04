@@ -258,20 +258,21 @@ try {
         const finalValue = LastpowerValue -  FirstpowerValue
         console.log(`Final Value: ${finalValue}`)
         if(finalValue > 0) {
-          const getCharger = await db.pool.query(`SELECT * from public."IoT" WHERE "IOTID"='${IoTID}'`)
-          console.log('IOT form DB:')
-          console.log(getCharger.rows)
-          const chargerId = getCharger.rows[0].ChargerId;
-          console.log(`charger id: ${chargerId}`)
+
+          console.log(`FirstpowerValue: ${FirstpowerValue}`)
+          console.log(`LastpowerValue: ${LastpowerValue}`)
+          console.log(`Final Value: ${finalValue}`)
+
+
+          //const getCharger = await db.pool.query(`SELECT * from public."IoT" WHERE "IOTID"='${IoTID}'`)
+          //console.log('IOT form DB:')
+          //console.log(getCharger.rows)
+          //const chargerId = getCharger.rows[0].ChargerId;
+          //console.log(`charger id: ${chargerId}`)
           //const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = '${finalValue}' WHERE "ChargerId"= ${chargerId} AND "Id" = ${id}`)
-          const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = '${finalValue}', "ChargingStatus" = 'Completed' WHERE "Id" = ${BookingId}`)
+          const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Completed' WHERE "Id" = ${BookingId}`)
         }
       }
-
-      console.log(`FirstpowerValue: ${FirstpowerValue}`)
-      console.log(`LastpowerValue: ${LastpowerValue}`)
-      console.log(`Final Value: ${finalValue}`)
-
     }
 
     console.log(withoutFirstAndLast)
