@@ -169,6 +169,91 @@ app.get('/api/getIoTStatus', async (req, res, next) => {
 
 });
 
+app.get('/api/getAllIoT', async (req, res, next) => {
+  
+  const iotStatus = await IoTModel.find().sort({_id: -1}).limit(2)
+
+  console.log(iotStatus)
+  console.log(iotStatus.length)
+
+  if (iotStatus.length == 0) {
+    return res.send(
+      { 
+          "statusCode": 404,
+          "message": "IoT not found"
+      }
+    )
+  } else {
+    
+    if(iotStatus.length >= 2) {
+      var data = [];
+      var tempData = [];
+
+      for(i= 0; i < iotStatus.length; i+=2) {
+        tempData.push({"_id": iotStatus[i]._id, "IOTID": iotStatus[i].IOTID})
+      }
+
+
+      data = tempData;
+      console.log(data)
+      
+      return res.send(
+      { 
+          "StatusCode" : 200,
+          data
+      }
+    )
+    }
+  }
+});
+
+
+app.get('/api/getIoTDetails/:id', async (req, res, next) => {
+  
+  const { id } = req.params;
+
+  const iotStatus = await IoTModel.find({"IOTID" : id}).sort({_id: -1}).limit(2)
+
+  console.log(iotStatus)
+  console.log(iotStatus.length)
+
+  if (iotStatus.length == 0) {
+    return res.send(
+      { 
+          "statusCode": 404,
+          "IOTID": id,
+          "message": "IoT Details not found"
+      }
+    )
+  } else {
+    
+    if(iotStatus.length >= 2) {
+
+      for(i=0; i< iotStatus.length; i+2) {
+        
+        const dataArray = []
+        for(k=0; k<2; k++) {
+          const withoutFirstAndLast = iotStatus[k].data.slice(1, -1);
+          const split_string = withoutFirstAndLast.split(",");
+          dataArray.push(split_string)
+        }
+        //console.log(dataArray)
+        const mergeResult = [...dataArray[1], ...dataArray[0]];
+
+        return res.send(
+          { 
+              "statusCode": 200,
+              "_id": iotStatus[i]._id,
+              "IOTID": iotStatus[i].IOTID,
+              "data": mergeResult
+          }
+        )
+      }
+      
+    }
+  }
+});
+
 
 app.listen(9002, () => {
   console.log('API server is listening on port 9002')
