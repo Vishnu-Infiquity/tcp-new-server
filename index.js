@@ -336,11 +336,16 @@ try {
         chargerStatus = 3;
         FirstpowerValue = powerConsumed;
         console.log(`FirstpowerValue: ${FirstpowerValue}`)
+        console.log(`powerConsumed: ${powerConsumed}`)
 
         const iotDataCount = split_string.length;
+        console.log(`iotDataCount: ${iotDataCount}`)
+
         const finalValue = powerConsumed - FirstpowerValue;
+        console.log(`finalValue: ${finalValue}`)
         if(iotDataCount == 24) {
           const ContactorStatus = split_string[3];
+          console.log(`ContactorStatus: ${ContactorStatus}`)
           if(ContactorStatus == 0) {
             const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Completed' WHERE "Id" = ${BookingId}`)
           }
