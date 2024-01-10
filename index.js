@@ -254,6 +254,59 @@ app.get('/api/getIoTDetails/:id', async (req, res, next) => {
   }
 });
 
+app.get('/api/getAllIoTDetails', async (req, res, next) => {
+  
+  const iotStatus = await IoTModel.find().sort({_id: -1}).limit(2)
+
+  console.log(iotStatus)
+  console.log(iotStatus.length)
+
+  if (iotStatus.length == 0) {
+    return res.send(
+      { 
+          "statusCode": 404,
+          "message": "IoT not found"
+      }
+    )
+  } else {
+    
+    if(iotStatus.length >= 2) {
+      var data = [];
+      var tempData = [];
+
+      for(i= 0; i < iotStatus.length; i+=2) {
+
+        const dataArray = []
+        for(k=0; k<2; k++) {
+          const withoutFirstAndLast = iotStatus[k].data.slice(1, -1);
+          const split_string = withoutFirstAndLast.split(",");
+          dataArray.push(split_string)
+        }
+        //console.log(dataArray)
+        const mergeResult = [...dataArray[1], ...dataArray[0]];
+        
+        tempData.push(
+          {
+            "IOTID": iotStatus[i].IOTID,
+            "IOTData": mergeResult
+          }
+          )
+      }
+
+
+      data = tempData;
+      console.log(data)
+      
+      return res.send(
+      { 
+          "StatusCode" : 200,
+          data
+      }
+    )
+    }
+  }
+});
+
 
 app.listen(9002, () => {
   console.log('API server is listening on port 9002')
@@ -336,8 +389,8 @@ try {
         chargerStatus = 3;
         FirstpowerValue = powerConsumed;
         console.log(`FirstpowerValue: ${FirstpowerValue}`)
+        /*-----*/
         console.log(`powerConsumed: ${powerConsumed}`)
-
         const iotDataCount = split_string.length;
         console.log(`iotDataCount: ${iotDataCount}`)
 
@@ -350,6 +403,7 @@ try {
             const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Completed' WHERE "Id" = ${BookingId}`)
           }
         } 
+        /*-----*/
 
       } else if(chargerStatus == 2){
         LastpowerValue = powerConsumed;
