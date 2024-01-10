@@ -255,8 +255,15 @@ app.get('/api/getIoTDetails/:id', async (req, res, next) => {
 });
 
 app.get('/api/getAllIoTDetails', async (req, res, next) => {
+
+  console.log(new Date(Date.now()).toISOString())
+  console.log(new Date(Date.now() - 3 * 60 * 1000).toISOString())
   
-  const iotStatus = await IoTModel.find().sort({_id: -1}).limit(2)
+  const iotStatus = await IoTModel.find({
+    "updatedAt": { 
+      $gte: new Date(Date.now() - 3 * 60 * 1000).toISOString()
+    }
+}).sort({_id: -1}).limit(2)
 
   console.log(iotStatus)
   console.log(iotStatus.length)
