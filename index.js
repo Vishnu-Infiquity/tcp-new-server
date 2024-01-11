@@ -406,7 +406,7 @@ try {
         if(iotDataCount == 24) {
           const ContactorStatus = split_string[3];
           console.log(`ContactorStatus: ${ContactorStatus}`)
-          if(ContactorStatus == 0) {
+          if(ContactorStatus == '0') {
             const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Completed' WHERE "Id" = ${BookingId}`)
           }
         } 
