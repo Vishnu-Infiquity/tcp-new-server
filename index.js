@@ -261,7 +261,7 @@ app.get('/api/getAllIoTDetails', async (req, res, next) => {
   
   const iotStatus = await IoTModel.find({
     "updatedAt": { 
-      $gte: new Date(Date.now() - 3 * 60 * 1000).toISOString()
+      $gte: new Date(Date.now() - 1 * 60 * 1000).toISOString()
     }
 }).sort({_id: -1}).limit(2)
 
@@ -272,7 +272,7 @@ app.get('/api/getAllIoTDetails', async (req, res, next) => {
     return res.send(
       { 
           "statusCode": 404,
-          "message": "IoT not found"
+          "message": "IoT Data not found"
       }
     )
   } else {
