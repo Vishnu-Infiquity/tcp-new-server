@@ -367,6 +367,9 @@ try {
     const BookingId = BookingIdArray[0];
     console.log(BookingId);
 
+    const getPreviousPowerConsumed = await db.pool.query(`SELECT * from public."Bookings" WHERE "BookingId"='${BookingId}'`)
+    const PreviousPowerConsumed= getPreviousPowerConsumed.rows[0].PowerConsumed;
+
     const dataNew = String(input);
     const withoutFirstAndLast = dataNew.slice(1, -1);
     const split_string = withoutFirstAndLast.split(",");
@@ -396,27 +399,64 @@ try {
         chargerStatus = 3;
         FirstpowerValue = powerConsumed;
         console.log(`FirstpowerValue: ${FirstpowerValue}`)
+
         /*-----*/
         console.log(`powerConsumed: ${powerConsumed}`)
         const iotDataCount = split_string.length;
         console.log(`iotDataCount: ${iotDataCount}`)
 
-        const finalValue = powerConsumed - FirstpowerValue;
+        const finalValue = (powerConsumed - FirstpowerValue) + PreviousPowerConsumed;
         console.log(`finalValue: ${finalValue}`)
+        var errorCount=0;
+
         if(iotDataCount == 24) {
-          const ContactorStatus = split_string[3];
-          console.log(`ContactorStatus: ${ContactorStatus}`)
-          if(ContactorStatus == '0') {
-            const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Completed' WHERE "Id" = ${BookingId}`)
+          console.log(`First set Data: ${iotDataCount}`)
+        
+          const value1 = split_string[1];
+          const value2 = split_string[2];
+          const value4 = split_string[4];
+          const value5 = split_string[5];
+          const value19 = split_string[19];
+          const value20 = split_string[20];
+          const value9 = split_string[9]; // which is greater than 4
+          
+          if(value1 == '1' || value2 == '1' || value4 == '1' || value5 == '1' || value19 == '1' || value20== '1' || value9 > '4') {
+            errorCount++;
+            if(errorCount > 4) {
+              chargerStatus = 3;
+              console.log('Charger off')
+              socket.write('CHARGEROFF');
+              const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Incompleted' WHERE "Id" = ${BookingId}`)
+
+              const SlotRef = await db.pool.query(`UPDATE public."Slots" SET "ChargingStatus" = 'Incompleted' WHERE "BookingId" = ${BookingId}`)
+
+            }
+          } else {
+            errorCount = 0;
           }
         } 
+
+        var CurrentTimeseconds = Math.round(new Date() / 1000);
+
+        const getBookings = await db.pool.query(`SELECT * from public."Slots" WHERE "BookingId"='${BookingId}'`)
+        const BookingEndDate = getBookings.rows[0].BookingEndDate;
+
+        if(CurrentTimeseconds > BookingEndDate) {
+          console.log("Time's up")
+          chargerStatus = 3;
+          socket.write('CHARGEROFF');
+          const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Completed' WHERE "Id" = ${BookingId}`)
+
+          const SlotRef = await db.pool.query(`UPDATE public."Slots" SET "ChargingStatus" = 'Completed' WHERE "BookingId" = ${BookingId}`)
+        }
+        
         /*-----*/
 
       } else if(chargerStatus == 2){
         LastpowerValue = powerConsumed;
         console.log(`LastpowerValue: ${LastpowerValue}`)
         chargerStatus = 3;
-        const finalValue = LastpowerValue -  FirstpowerValue
+        const finalValue = (LastpowerValue -  FirstpowerValue ) + PreviousPowerConsumed
         console.log(`Final Value: ${finalValue}`)
         if(finalValue > 0) {
 
@@ -432,6 +472,9 @@ try {
           //console.log(`charger id: ${chargerId}`)
           //const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = '${finalValue}' WHERE "ChargerId"= ${chargerId} AND "Id" = ${id}`)
           const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Completed' WHERE "Id" = ${BookingId}`)
+
+          const SlotRef = await db.pool.query(`UPDATE public."Slots" SET "ChargingStatus" = 'Completed' WHERE "BookingId" = ${BookingId}`)
+
         }
       }
     }
