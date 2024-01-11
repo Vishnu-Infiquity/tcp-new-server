@@ -271,8 +271,8 @@ app.get('/api/getAllIoTDetails', async (req, res, next) => {
   if (iotStatus.length == 0) {
     return res.send(
       { 
-          "statusCode": 404,
-          "message": "IoT Data not found"
+          "statusCode": 200,
+          "data": []
       }
     )
   } else {
