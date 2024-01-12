@@ -28,6 +28,8 @@ let LastpowerValue=0;
 var errorCount=0;
 var charger = 0 ;
 
+var powerConsumed = 0; 
+
 const server = net.createServer(socket => {
 
   const remoteAddress = socket.remoteAddress;
@@ -318,22 +320,19 @@ try {
     //console.log(dataToSave)
     //console.log('Success')
 
-
-    const last6 = split_string.slice(-6);
     //console.log(last6);
     //const powerConsumed = last6[0];
-    
+    //let powerConsumed;
+    if(iotDataCount == 35) {
+      const last6 = split_string.slice(-6);
+      powerConsumed = last6[0]
+    }
     
     //console.log(`powerConsumed: ${powerConsumed}`)
 
     const iotDataCount = split_string.length;
     console.log(`iotDataCount: ${iotDataCount}`)
 
-    let powerConsumed;
-    if(iotDataCount == 35) {
-      powerConsumed = last6[0]
-    }
-    
     if(charger == 1) {
       console.log(`charger on : ${charger}`)
 
