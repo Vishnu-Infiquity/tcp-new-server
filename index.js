@@ -158,7 +158,7 @@ app.get('/api/getAllIoT', async (req, res, next) => {
 
 
       data = tempData;
-      console.log(data)
+      //console.log(data)
       
       return res.send(
       { 
@@ -177,8 +177,8 @@ app.get('/api/getIoTDetails/:id', async (req, res, next) => {
 
   const iotStatus = await IoTModel.find({"IOTID" : id}).sort({_id: -1}).limit(2)
 
-  console.log(iotStatus)
-  console.log(iotStatus.length)
+  //console.log(iotStatus)
+  //console.log(iotStatus.length)
 
   if (iotStatus.length == 0) {
     return res.send(
@@ -228,8 +228,8 @@ app.get('/api/getAllIoTDetails', async (req, res, next) => {
     }
 }).sort({_id: -1}).limit(2)
 
-  console.log(iotStatus)
-  console.log(iotStatus.length)
+  //console.log(iotStatus)
+  //console.log(iotStatus.length)
 
   if (iotStatus.length == 0) {
     return res.send(
@@ -265,7 +265,7 @@ app.get('/api/getAllIoTDetails', async (req, res, next) => {
 
 
       data = tempData;
-      console.log(data)
+      //console.log(data)
       
       return res.send(
       { 
@@ -328,7 +328,7 @@ try {
     console.log(`iotDataCount: ${iotDataCount}`)
 
     if(charger == 1) {
-
+      console.log(`charger on : ${charger}`)
     if(iotDataCount == 24) {
       console.log(`First set Data: ${iotDataCount}`)
     
@@ -340,8 +340,11 @@ try {
       const value20 = split_string[20];
       const value9 = split_string[9]; // which is greater than 4
       
-      if(value1 == '1' || value2 == '1' || value4 == '1' || value5 == '1' || value19 == '1' || value20== '1' || value9 > '4') {
+      console.log(`Getteing values from IOT -5th value: ${value5}`)
+
+      if(value1 == 1 || value2 == 1 || value4 == 1 || value5 == 1 || value19 == 1 || value20== 1 || value9 > 4 ) {
         errorCount++;
+        console.log(`errorCount : ${errorCount}`)
         if(errorCount > 2) {
           charger = 0;
           chargerStatus = 3;
