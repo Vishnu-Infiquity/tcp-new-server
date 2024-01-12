@@ -343,16 +343,18 @@ try {
       if(value1 == '1' || value2 == '1' || value4 == '1' || value5 == '1' || value19 == '1' || value20== '1' || value9 > '4') {
         errorCount++;
         if(errorCount > 2) {
+          charger = 0;
           chargerStatus = 3;
           console.log('Charger off')
-          socket.write('CHARGEROFF');
-          const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Incompleted' WHERE "Id" = ${BookingId}`)
+          //socket.write('CHARGEROFF');
+          const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Incomplete' WHERE "Id" = ${BookingId}`)
 
-          const SlotRef = await db.pool.query(`UPDATE public."Slots" SET "ChargingStatus" = 'Incompleted' WHERE "BookingId" = ${BookingId}`)
+          const SlotRef = await db.pool.query(`UPDATE public."Slots" SET "ChargingStatus" = 'Incomplete' WHERE "BookingId" = ${BookingId}`)
 
         }
       } else {
         errorCount = 0;
+        charger = 0;
       }
     } 
   }
@@ -376,7 +378,7 @@ try {
         if(CurrentTimeseconds > BookingEndDate) {
           console.log("Time's up")
           chargerStatus = 3;
-          socket.write('CHARGEROFF');
+          //socket.write('CHARGEROFF');
           const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Completed' WHERE "Id" = ${BookingId}`)
 
           const SlotRef = await db.pool.query(`UPDATE public."Slots" SET "ChargingStatus" = 'Completed' WHERE "BookingId" = ${BookingId}`)
@@ -396,7 +398,7 @@ try {
            const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Completed' WHERE "Id" = ${BookingId}`)
 
           const SlotRef = await db.pool.query(`UPDATE public."Slots" SET "ChargingStatus" = 'Completed' WHERE "BookingId" = ${BookingId}`)
-          socket.write('CHARGEROFF');
+          //socket.write('CHARGEROFF');
         }
       }
 }
