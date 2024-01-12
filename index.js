@@ -288,11 +288,11 @@ try {
   
     console.log(`chargerStatus:${chargerStatus}`);
 
-    console.log(`BookingId:${id}`);
+    //console.log(`BookingId:${id}`);
     const BookingIdArray = Object.values(id);
     //console.log(BookingIdArray[0]);
     const BookingId = BookingIdArray[0];
-    console.log(BookingId);
+    //console.log(BookingId);
 
     let PreviousPowerConsumed = 0;
     if (BookingId && typeof BookingId !== "undefined") {
@@ -320,9 +320,9 @@ try {
 
 
     const last6 = split_string.slice(-6);
-    console.log(last6);
+    //console.log(last6);
     const powerConsumed = last6[0];
-    console.log(`powerConsumed: ${powerConsumed}`)
+    //console.log(`powerConsumed: ${powerConsumed}`)
 
     const iotDataCount = split_string.length;
     console.log(`iotDataCount: ${iotDataCount}`)
@@ -342,7 +342,7 @@ try {
       
       console.log(`Getteing values from IOT -5th value: ${value5}`)
 
-      if(value1 == 1 || value2 == 1 || value4 == 1 || value5 == 1 || value19 == 1 || value20== 1 || value9 > 4 ) {
+      if(value1 == '1' || value2 == '1' || value4 == '1' || value5 == '1' || value19 == '1' || value20== '1' || value9 > '4' ) {
         errorCount++;
         console.log(`errorCount : ${errorCount}`)
         if(errorCount > 2) {
@@ -370,7 +370,7 @@ try {
         /*-----*/
 
         const finalValue = (powerConsumed - FirstpowerValue) + PreviousPowerConsumed;
-        console.log(`finalValue: ${finalValue}`)
+        //console.log(`finalValue: ${finalValue}`)
 
       
         var CurrentTimeseconds = Math.round(new Date() / 1000);
@@ -392,10 +392,10 @@ try {
       } else if(chargerStatus == 2){
         charger = 0
         LastpowerValue = powerConsumed;
-        console.log(`LastpowerValue: ${LastpowerValue}`)
+        //console.log(`LastpowerValue: ${LastpowerValue}`)
         chargerStatus = 3;
         const finalValue = (LastpowerValue -  FirstpowerValue ) + PreviousPowerConsumed
-        console.log(`Final Value: ${finalValue}`)
+        //console.log(`Final Value: ${finalValue}`)
         if(finalValue > 0) {
 
            const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Completed' WHERE "Id" = ${BookingId}`)
