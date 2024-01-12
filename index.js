@@ -54,39 +54,12 @@ const server = net.createServer(socket => {
 
     const input = data.toString().trim();
     console.log(input);
-    console.log(remoteAddress);
-    console.log(remotePort);
+    //console.log(remoteAddress);
+    //console.log(remotePort);
 
 
     const updateIOT = updateIOTStatus(data, remoteAddress, remotePort)
 
-    /*if (input.includes("IOTID")) {
-        const iotidPattern = /IOTID:(\d{5})/;
-        const matches = input.match(iotidPattern);
-        if (matches) {
-            const iotId = parseInt(matches[1]);
-            console.log(`Received IoT ID: ${iotId}`);
-        }
-    }else if(input.includes("TEMP")){
-
-        const temperaturePattern = /TEMP:(\d+\.\d+)/;
-        const matches = input.match(temperaturePattern);
-        if (matches) {
-            const temperature = parseFloat(matches[1]);
-            console.log(`Temperature data: ${temperature}`);
-        }else{
-            console.log("Invalid temperature data format");
-        }
-     }else if(input.includes("METER")){
-        const meterPattern = /METER:(\d+\.\d+)/;
-        const matches = input.match(meterPattern);
-        if (matches) {
-            const meter = parseFloat(matches[1]);
-            console.log(`meter data: ${meter}`);
-        }else{
-            console.log("Invalid meter data format");
-        }
-     }*/
   });
 
   socket.on('end', () => {
@@ -112,19 +85,14 @@ let id = 0;
 
 app.get('/api/startCharging/CHARGEON/:id', async (req, res, next) => {
   id = req.params;
-  console.log(1111)
   Status = true;
   console.log(Status)
-  //const input = '{0,0,0,0,0,0,0,0,100,100,100,100,0,0,0,0,0,0,0,0,23587,23583,23590,23588,0,0,0,0,710,2690,1,0,4996,0}';//data.toString().trim();
-    
-  //const updateIOT = updateIOTStatus(input)
   chargerStatus = 1;
   res.send("CHARGE ON")
 });
 
 app.get('/api/startCharging/CHARGEOFF/:id', async (req, res, next) => {
   id = req.params;
-  console.log(2222)
   Status = false;
   console.log(Status)
   chargerStatus = 2;
@@ -137,10 +105,6 @@ app.get('/api/getIoTStatus', async (req, res, next) => {
   if (!iotStatus) {
     return res.send(res, 'iotStatus not found', 404);
   } else {
-    //return res.send(iotStatus);
-    //console.log('count->')
-    //console.log(iotStatus)
-    //console.log(iotStatus.length);
 
     const dataArray = []
     for(i=0; i<2; i++) {
@@ -150,10 +114,6 @@ app.get('/api/getIoTStatus', async (req, res, next) => {
     }
     //console.log(dataArray)
     const mergeResult = [...dataArray[1], ...dataArray[0]];
-    //console.log(mergeResult)
-    /*const withoutFirstAndLast = iotStatus[0].data.slice(1, -1);
-    const split_string = withoutFirstAndLast.split(",");
-    console.log(split_string)*/
 
     return res.send(
       { 
@@ -322,45 +282,9 @@ app.listen(9002, () => {
 })
 
 async function updateIOTStatus(input, remoteAddress, remotePort) {
-  console.log('call db')
-  console.log('input from IOT device:')
-  console.log(input)
-  /*const IoTId = '1'
-  const dataArray = []
-  const dataset = input; //'{0,0,0,0,0,0,0,0,2,0,81,0,123,144,27,26,99,0,1,0,0,0,0}';
-  const withoutFirstAndLast = dataset.slice(1, -1);
-  console.log(withoutFirstAndLast);
-  const split_string = withoutFirstAndLast.split(",");
-  dataArray.push(split_string)
-
-  const last6 = dataArray[0].slice(-6);
-  console.log(last6);
-  const powerConsumed = last6[0];
-  console.log(powerConsumed);
-
-  const getCharger = await db.pool.query(`SELECT * from public."IoT" WHERE "IOTID"='${IoTId}'`)
-
-  const chargerId = getCharger.rows[0].chargerId;
-
-  const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = '${powerConsumed}' WHERE "ChargerId"= ${chargerId}`)
-  */
-
-  /*if(input == 'IOTID:1') {
-    iotDataCount = 0;
-  } else {
-    //const withoutFirstAndLast = input.slice(1, -1);
-    //console.log(`without First And Last->${withoutFirstAndLast}`)
-    //const split_string = withoutFirstAndLast.split(",");
-    //console.log(`after split->${split_string}`)
-    //const iotDataCount = split_string.length;
-    //console.log(`iot Data Count->${iotDataCount}`)
-    iotDataCount = 1;
-  }*/
 
 try {
   
-  //if(iotDataCount == 23 || iotDataCount == 34) {
-    /*if(iotDataCount == 1) {*/
     console.log(`chargerStatus:${chargerStatus}`);
 
     console.log(`BookingId:${id}`);
@@ -387,11 +311,11 @@ try {
       remotePort: remotePort
     })
   
-    console.log(data)
+    ///console.log(data)
   
     const dataToSave = await data.save();
-    console.log(dataToSave)
-    console.log('Success')
+    //console.log(dataToSave)
+    //console.log('Success')
 
 
     const last6 = split_string.slice(-6);
@@ -399,14 +323,12 @@ try {
     const powerConsumed = last6[0];
     console.log(`powerConsumed: ${powerConsumed}`)
 
-    //if(powerConsumed > 0){
       if(chargerStatus == 1){
         chargerStatus = 3;
         FirstpowerValue = powerConsumed;
-        console.log(`FirstpowerValue: ${FirstpowerValue}`)
-
+        
         /*-----*/
-        console.log(`powerConsumed: ${powerConsumed}`)
+       
         const iotDataCount = split_string.length;
         console.log(`iotDataCount: ${iotDataCount}`)
 
@@ -464,28 +386,12 @@ try {
         console.log(`Final Value: ${finalValue}`)
         if(finalValue > 0) {
 
-          console.log(`FirstpowerValue: ${FirstpowerValue}`)
-          console.log(`LastpowerValue: ${LastpowerValue}`)
-          console.log(`Final Value: ${finalValue}`)
-
-
-          //const getCharger = await db.pool.query(`SELECT * from public."IoT" WHERE "IOTID"='${IoTID}'`)
-          //console.log('IOT form DB:')
-          //console.log(getCharger.rows)
-          //const chargerId = getCharger.rows[0].ChargerId;
-          //console.log(`charger id: ${chargerId}`)
-          //const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = '${finalValue}' WHERE "ChargerId"= ${chargerId} AND "Id" = ${id}`)
-          const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Completed' WHERE "Id" = ${BookingId}`)
+           const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Completed' WHERE "Id" = ${BookingId}`)
 
           const SlotRef = await db.pool.query(`UPDATE public."Slots" SET "ChargingStatus" = 'Completed' WHERE "BookingId" = ${BookingId}`)
           socket.write('CHARGEROFF');
         }
       }
-    //}
-
-    console.log(withoutFirstAndLast)
-    console.log(split_string)
-    console.log(IoTID);
 }
 catch (error) {
     console.log(error)
