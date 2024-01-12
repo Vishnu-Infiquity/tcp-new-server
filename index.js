@@ -329,6 +329,11 @@ try {
 
     if(charger == 1) {
       console.log(`charger on : ${charger}`)
+      const finalValue = (powerConsumed - FirstpowerValue) + PreviousPowerConsumed;
+      console.log(powerConsumed);
+      console.log(FirstpowerValue);
+      console.log(PreviousPowerConsumed);
+
     if(iotDataCount == 24) {
       console.log(`First set Data: ${iotDataCount}`)
     
@@ -350,8 +355,7 @@ try {
           chargerStatus = 3;
           console.log('Charger off')
           //socket.write('CHARGEROFF');
-          const finalValue = (powerConsumed - FirstpowerValue) + PreviousPowerConsumed;
-          
+        
           const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Incomplete' WHERE "Id" = ${BookingId}`)
 
           const SlotRef = await db.pool.query(`UPDATE public."Slots" SET "ChargingStatus" = 'Incomplete' WHERE "BookingId" = ${BookingId}`)
