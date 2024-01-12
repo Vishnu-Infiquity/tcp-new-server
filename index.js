@@ -26,6 +26,7 @@ let FirstpowerValue=0;
 let LastpowerValue=0;
 
 var errorCount=0;
+var charger = 0 ;
 
 const server = net.createServer(socket => {
 
@@ -323,45 +324,50 @@ try {
     const powerConsumed = last6[0];
     console.log(`powerConsumed: ${powerConsumed}`)
 
+    const iotDataCount = split_string.length;
+    console.log(`iotDataCount: ${iotDataCount}`)
+
+    if(charger == 1) {
+
+    if(iotDataCount == 24) {
+      console.log(`First set Data: ${iotDataCount}`)
+    
+      const value1 = split_string[1];
+      const value2 = split_string[2];
+      const value4 = split_string[4];
+      const value5 = split_string[5];
+      const value19 = split_string[19];
+      const value20 = split_string[20];
+      const value9 = split_string[9]; // which is greater than 4
+      
+      if(value1 == '1' || value2 == '1' || value4 == '1' || value5 == '1' || value19 == '1' || value20== '1' || value9 > '4') {
+        errorCount++;
+        if(errorCount > 2) {
+          chargerStatus = 3;
+          console.log('Charger off')
+          socket.write('CHARGEROFF');
+          const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Incompleted' WHERE "Id" = ${BookingId}`)
+
+          const SlotRef = await db.pool.query(`UPDATE public."Slots" SET "ChargingStatus" = 'Incompleted' WHERE "BookingId" = ${BookingId}`)
+
+        }
+      } else {
+        errorCount = 0;
+      }
+    } 
+  }
+
       if(chargerStatus == 1){
+        charger = 1
         chargerStatus = 3;
         FirstpowerValue = powerConsumed;
         
         /*-----*/
-       
-        const iotDataCount = split_string.length;
-        console.log(`iotDataCount: ${iotDataCount}`)
 
         const finalValue = (powerConsumed - FirstpowerValue) + PreviousPowerConsumed;
         console.log(`finalValue: ${finalValue}`)
 
-        if(iotDataCount == 24) {
-          console.log(`First set Data: ${iotDataCount}`)
-        
-          const value1 = split_string[1];
-          const value2 = split_string[2];
-          const value4 = split_string[4];
-          const value5 = split_string[5];
-          const value19 = split_string[19];
-          const value20 = split_string[20];
-          const value9 = split_string[9]; // which is greater than 4
-          
-          if(value1 == '1' || value2 == '1' || value4 == '1' || value5 == '1' || value19 == '1' || value20== '1' || value9 > '4') {
-            errorCount++;
-            if(errorCount > 2) {
-              chargerStatus = 3;
-              console.log('Charger off')
-              socket.write('CHARGEROFF');
-              const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Incompleted' WHERE "Id" = ${BookingId}`)
-
-              const SlotRef = await db.pool.query(`UPDATE public."Slots" SET "ChargingStatus" = 'Incompleted' WHERE "BookingId" = ${BookingId}`)
-
-            }
-          } else {
-            errorCount = 0;
-          }
-        } 
-
+      
         var CurrentTimeseconds = Math.round(new Date() / 1000);
 
         const getBookings = await db.pool.query(`SELECT * from public."Slots" WHERE "BookingId"='${BookingId}'`)
@@ -379,6 +385,7 @@ try {
         /*-----*/
 
       } else if(chargerStatus == 2){
+        charger = 0
         LastpowerValue = powerConsumed;
         console.log(`LastpowerValue: ${LastpowerValue}`)
         chargerStatus = 3;
