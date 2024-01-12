@@ -322,6 +322,7 @@ try {
     const last6 = split_string.slice(-6);
     //console.log(last6);
     const powerConsumed = last6[0];
+    
     //console.log(`powerConsumed: ${powerConsumed}`)
 
     const iotDataCount = split_string.length;
@@ -329,10 +330,6 @@ try {
 
     if(charger == 1) {
       console.log(`charger on : ${charger}`)
-      const finalValue = (powerConsumed - FirstpowerValue) + PreviousPowerConsumed;
-      console.log(powerConsumed);
-      console.log(FirstpowerValue);
-      console.log(PreviousPowerConsumed);
 
     if(iotDataCount == 24) {
       console.log(`First set Data: ${iotDataCount}`)
@@ -351,6 +348,9 @@ try {
         errorCount++;
         console.log(`errorCount : ${errorCount}`)
         if(errorCount > 2) {
+
+          const finalValue = (powerConsumed -  FirstpowerValue ) + PreviousPowerConsumed
+
           charger = 0;
           chargerStatus = 3;
           console.log('Charger off')
