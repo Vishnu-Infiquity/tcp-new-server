@@ -373,7 +373,7 @@ try {
           const SlotRef = await db.pool.query(`UPDATE public."Slots" SET "ChargingStatus" = 'Incomplete' WHERE "BookingId" = ${BookingId}`)
 
           Status = false;
-          server.write('CHARGEROFF')
+          //server.write('CHARGEROFF')
 
         }
       } else {
@@ -409,7 +409,7 @@ try {
           const SlotRef = await db.pool.query(`UPDATE public."Slots" SET "ChargingStatus" = 'Completed' WHERE "BookingId" = ${BookingId}`)
 
           Status = false;
-          server.write('CHARGEROFF')
+          //server.write('CHARGEROFF')
         }
         
         /*-----*/
