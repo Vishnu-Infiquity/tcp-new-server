@@ -299,7 +299,7 @@ try {
     let PreviousPowerConsumed = 0;
     if (BookingId && typeof BookingId !== "undefined") {
       const getPreviousPowerConsumed = await db.pool.query(`SELECT * from public."Bookings" WHERE "Id"='${BookingId}'`)
-      PreviousPowerConsumed= getPreviousPowerConsumed.rows[0].PowerConsumed;
+      PreviousPowerConsumed= parseInt(getPreviousPowerConsumed.rows[0].PowerConsumed);
     }
 
     const dataNew = String(input);
