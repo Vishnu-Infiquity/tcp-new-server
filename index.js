@@ -349,7 +349,12 @@ try {
         console.log(`errorCount : ${errorCount}`)
         if(errorCount > 2) {
 
+          console.log("powerConsumed: " +powerConsumed)
+          console.log("FirstpowerValue: " +FirstpowerValue)
+          console.log("PreviousPowerConsumed: " +PreviousPowerConsumed)
+
           const finalValue = (powerConsumed -  FirstpowerValue ) + PreviousPowerConsumed
+          console.log("Final Value: " +finalValue)
 
           charger = 0;
           chargerStatus = 3;
