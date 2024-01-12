@@ -399,7 +399,7 @@ try {
     const powerConsumed = last6[0];
     console.log(`powerConsumed: ${powerConsumed}`)
 
-    if(powerConsumed > 0){
+    //if(powerConsumed > 0){
       if(chargerStatus == 1){
         chargerStatus = 3;
         FirstpowerValue = powerConsumed;
@@ -481,7 +481,7 @@ try {
           socket.write('CHARGEROFF');
         }
       }
-    }
+    //}
 
     console.log(withoutFirstAndLast)
     console.log(split_string)
