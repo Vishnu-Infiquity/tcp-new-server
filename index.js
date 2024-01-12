@@ -367,8 +367,11 @@ try {
     const BookingId = BookingIdArray[0];
     console.log(BookingId);
 
-    const getPreviousPowerConsumed = await db.pool.query(`SELECT * from public."Bookings" WHERE "BookingId"='${BookingId}'`)
-    const PreviousPowerConsumed= getPreviousPowerConsumed.rows[0].PowerConsumed;
+    let PreviousPowerConsumed = 0;
+    if (BookingId && typeof BookingId !== "undefined") {
+      const getPreviousPowerConsumed = await db.pool.query(`SELECT * from public."Bookings" WHERE "BookingId"='${BookingId}'`)
+      PreviousPowerConsumed= getPreviousPowerConsumed.rows[0].PowerConsumed;
+    }
 
     const dataNew = String(input);
     const withoutFirstAndLast = dataNew.slice(1, -1);
