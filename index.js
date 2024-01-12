@@ -323,15 +323,17 @@ try {
     //console.log(last6);
     //const powerConsumed = last6[0];
     //let powerConsumed;
-    if(iotDataCount == 35) {
-      const last6 = split_string.slice(-6);
-      powerConsumed = last6[0]
-    }
     
     //console.log(`powerConsumed: ${powerConsumed}`)
 
     const iotDataCount = split_string.length;
     console.log(`iotDataCount: ${iotDataCount}`)
+
+    if(iotDataCount == 35) {
+      const last6 = split_string.slice(-6);
+      powerConsumed = last6[0]
+    }
+    
 
     if(charger == 1) {
       console.log(`charger on : ${charger}`)
