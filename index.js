@@ -357,7 +357,7 @@ try {
         }
       } else {
         errorCount = 0;
-        charger = 0;
+        //charger = 0;
       }
     } 
   }
@@ -379,6 +379,7 @@ try {
         const BookingEndDate = getBookings.rows[0].BookingEndDate;
 
         if(CurrentTimeseconds > BookingEndDate) {
+          charger =0 ;
           console.log("Time's up")
           chargerStatus = 3;
           //socket.write('CHARGEROFF');
