@@ -367,10 +367,13 @@ try {
           chargerStatus = 3;
           console.log('Charger off')
           //socket.write('CHARGEROFF');
-        
+          
           const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Incomplete' WHERE "Id" = ${BookingId}`)
 
           const SlotRef = await db.pool.query(`UPDATE public."Slots" SET "ChargingStatus" = 'Incomplete' WHERE "BookingId" = ${BookingId}`)
+
+          Status = false;
+          server.write('CHARGEROFF')
 
         }
       } else {
@@ -404,6 +407,9 @@ try {
           const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Completed' WHERE "Id" = ${BookingId}`)
 
           const SlotRef = await db.pool.query(`UPDATE public."Slots" SET "ChargingStatus" = 'Completed' WHERE "BookingId" = ${BookingId}`)
+
+          Status = false;
+          server.write('CHARGEROFF')
         }
         
         /*-----*/
