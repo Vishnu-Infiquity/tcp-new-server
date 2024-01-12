@@ -25,6 +25,8 @@ mongoose.connect('mongodb+srv://narayanarajugv:jZ5hzXiTWzUhq3bc@cluster0.bt2cg2j
 let FirstpowerValue=0;
 let LastpowerValue=0;
 
+var errorCount=0;
+
 const server = net.createServer(socket => {
 
   const remoteAddress = socket.remoteAddress;
@@ -410,7 +412,6 @@ try {
 
         const finalValue = (powerConsumed - FirstpowerValue) + PreviousPowerConsumed;
         console.log(`finalValue: ${finalValue}`)
-        var errorCount=0;
 
         if(iotDataCount == 24) {
           console.log(`First set Data: ${iotDataCount}`)
@@ -425,7 +426,7 @@ try {
           
           if(value1 == '1' || value2 == '1' || value4 == '1' || value5 == '1' || value19 == '1' || value20== '1' || value9 > '4') {
             errorCount++;
-            if(errorCount > 4) {
+            if(errorCount > 2) {
               chargerStatus = 3;
               console.log('Charger off')
               socket.write('CHARGEROFF');
