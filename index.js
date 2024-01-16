@@ -116,20 +116,36 @@ app.get('/api/getIoTStatus', async (req, res, next) => {
       dataArray.push(split_string)
     }
     //console.log(dataArray)
-    const mergeResult = [...dataArray[1], ...dataArray[0]];
-
-    return res.send(
-      { 
-          "statusCode": 200,
-          "_id": iotStatus[0]._id,
-          "IOTID": iotStatus[0].IOTID,
-          "data": mergeResult,
-          "remoteAddress": iotStatus[0].remoteAddress,
-          "remotePort": iotStatus[0].remotePort,
-          "createdAt": iotStatus[0].createdAt,
-          "updatedAt": iotStatus[0].updatedAt
-      }
-    )
+    if(dataArray[1].length == 24 && dataArray[0].length == 35)
+    {
+      const mergeResult = [...dataArray[1], ...dataArray[0]];
+      return res.send(
+        { 
+            "statusCode": 200,
+            "_id": iotStatus[0]._id,
+            "IOTID": iotStatus[0].IOTID,
+            "data": mergeResult,
+            "remoteAddress": iotStatus[0].remoteAddress,
+            "remotePort": iotStatus[0].remotePort,
+            "createdAt": iotStatus[0].createdAt,
+            "updatedAt": iotStatus[0].updatedAt
+        }
+      )
+    } else {
+      return res.send(
+        { 
+            "statusCode": 400,
+            "message": 'Error While getting IOT Status',
+            "_id": iotStatus[0]._id,
+            "IOTID": iotStatus[0].IOTID,
+            "data": [],
+            "remoteAddress": iotStatus[0].remoteAddress,
+            "remotePort": iotStatus[0].remotePort,
+            "createdAt": iotStatus[0].createdAt,
+            "updatedAt": iotStatus[0].updatedAt
+        }
+      )
+    }
   }
 
 });
@@ -255,14 +271,25 @@ app.get('/api/getAllIoTDetails', async (req, res, next) => {
           dataArray.push(split_string)
         }
         //console.log(dataArray)
-        const mergeResult = [...dataArray[1], ...dataArray[0]];
-        
-        tempData.push(
-          {
-            "IOTID": iotStatus[i].IOTID,
-            "IOTData": mergeResult
-          }
+        if(dataArray[1].length == 24 && dataArray[0].length == 35)
+        {
+          const mergeResult = [...dataArray[1], ...dataArray[0]];
+          
+          tempData.push(
+            {
+              "IOTID": iotStatus[i].IOTID,
+              "IOTData": mergeResult
+            }
           )
+        } else {
+          tempData.push(
+            {
+              "message": 'Error While getting IOT Details',
+              "IOTID": iotStatus[i].IOTID,
+              "IOTData": []
+            }
+          )
+        }
       }
 
 
@@ -392,8 +419,11 @@ try {
 
         const finalValue = (powerConsumed - FirstpowerValue) + PreviousPowerConsumed;
         //console.log(`finalValue: ${finalValue}`)
+        if(iotDataCount == 35) {
+          const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Charging' WHERE "Id" = ${BookingId}`)
+          const SlotRef = await db.pool.query(`UPDATE public."Slots" SET "ChargingStatus" = 'Charging' WHERE "BookingId" = ${BookingId}`)
+        }
 
-      
         var CurrentTimeseconds = Math.round(new Date() / 1000);
 
         const getBookings = await db.pool.query(`SELECT * from public."Slots" WHERE "BookingId"='${BookingId}'`)
