@@ -11,10 +11,13 @@ env.config()
 
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb+srv://narayanarajugv:jZ5hzXiTWzUhq3bc@cluster0.bt2cg2j.mongodb.net/GMR', {
+/*mongoose.connect('mongodb+srv://narayanarajugv:jZ5hzXiTWzUhq3bc@cluster0.bt2cg2j.mongodb.net/GMR', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-  });
+  });*/
+
+  mongoose.connect('mongodb+srv://narayanarajugv:jZ5hzXiTWzUhq3bc@cluster0.bt2cg2j.mongodb.net/GMR');
+
   mongoose.connection.on('error', (err) => {
     console.log('Mongoose connection error: ', err);
   });
