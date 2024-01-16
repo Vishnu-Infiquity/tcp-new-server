@@ -237,8 +237,8 @@ app.get('/api/getIoTDetails/:id', async (req, res, next) => {
 
 app.get('/api/getAllIoTDetails', async (req, res, next) => {
 
-  console.log(new Date(Date.now()).toISOString())
-  console.log(new Date(Date.now() - 3 * 60 * 1000).toISOString())
+  //console.log(new Date(Date.now()).toISOString())
+  //console.log(new Date(Date.now() - 3 * 60 * 1000).toISOString())
   
   const iotStatus = await IoTModel.find({
     "updatedAt": { 
@@ -376,7 +376,7 @@ try {
       const value20 = split_string[20];
       const value9 = split_string[9]; // which is greater than 4
       
-      console.log(`Getteing values from IOT -5th value: ${value5}`)
+      console.log(`Getteing values from IOT 5th value: ${value5}`)
 
       if(value1 == '1' || value2 == '1' || value4 == '1' || value5 == '1' || value19 == '1' || value20== '1' || value9 > '4' ) {
         errorCount++;
