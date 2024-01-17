@@ -368,6 +368,12 @@ try {
     if(charger == 1) {
       console.log(`charger on : ${charger}`)
 
+      if(iotDataCount == 35) {
+        const finalValue = (powerConsumed -  FirstpowerValue ) + PreviousPowerConsumed
+        const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Charging' WHERE "Id" = ${BookingId}`)
+        const SlotRef = await db.pool.query(`UPDATE public."Slots" SET "ChargingStatus" = 'Charging' WHERE "BookingId" = ${BookingId}`)
+      }
+
     if(iotDataCount == 24) {
       console.log(`First set Data: ${iotDataCount}`)
     
@@ -422,10 +428,7 @@ try {
 
         const finalValue = (powerConsumed - FirstpowerValue) + PreviousPowerConsumed;
         //console.log(`finalValue: ${finalValue}`)
-        if(iotDataCount == 35) {
-          const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Charging' WHERE "Id" = ${BookingId}`)
-          const SlotRef = await db.pool.query(`UPDATE public."Slots" SET "ChargingStatus" = 'Charging' WHERE "BookingId" = ${BookingId}`)
-        }
+       
 
         var CurrentTimeseconds = Math.round(new Date() / 1000);
 
