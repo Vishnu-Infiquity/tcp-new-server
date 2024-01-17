@@ -381,7 +381,7 @@ try {
       
       console.log(`Getteing values from IOT 5th value: ${value5}`)
 
-      if(value1 == '1' || value2 == '1' || value4 == '1' || value5 == '1' || value19 == '1' || value20== '1' || value9 > '4' ) {
+      if(value1 == '1' || value2 == '1' || value4 == '1' || value5 == '1' || value19 == '1' || value20== '1' || value9 > '4' || value19 == '1' || value20 == '1' ) {
         errorCount++;
         console.log(`errorCount : ${errorCount}`)
         if(errorCount > 2) {
