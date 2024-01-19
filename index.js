@@ -312,6 +312,70 @@ app.get('/api/getAllIoTDetails', async (req, res, next) => {
 });
 
 
+app.post('/api/getChargerFaultDetails/', async (req, res, next) => {
+  
+  const { ChargerID, StartDate, EndDate } = req.body;
+
+  const getChargerDetails = await db.pool.query(`SELECT * from public."Chargers" WHERE "ChargerId"='${ChargerID}'`)
+  console.log('getChargerDetails count:')
+  console.log(getChargerDetails.rowCount)
+
+  if(getChargerDetails.rowCount > 0) {
+    const chargerId = getChargerDetails.rows[0].Id;
+    console.log('chargerId:')
+    console.log(chargerId)
+
+    const getIoTDetails = await db.pool.query(`SELECT * from public."IoT" WHERE "ChargerId"='${chargerId}'`)
+
+    const IOTID = getIoTDetails.rows[0].IOTID;
+    console.log('IOTID:')
+    console.log(IOTID)
+
+    const StartDateEpoc= new Date(StartDate)
+    console.log(StartDateEpoc)
+
+    const EndDateEpoc= new Date(EndDate)
+    console.log(EndDateEpoc)
+
+    //const iotDetails = await IoTModel.find({"IOTID" : IOTID}, {"createdAt" : '2023-12-12T16:36:47.995+00:00'}).sort({_id: -1})
+    //const iotDetails = await IoTModel.find({"IOTID" : IOTID , "createdAt" : '2024-01-18T14:21:36.461+00:00'}).sort({_id: -1})
+
+    const iotDetails = await IoTModel.find({ "IOTID" : IOTID , "createdAt" : { $gte: StartDateEpoc, $lt: EndDateEpoc } }).sort({_id: -1})
+
+    console.log('iotDetails count:')
+    console.log(iotDetails.length)
+
+    if (iotDetails.length == 0) {
+      return res.send(
+        { 
+            "statusCode": 200,
+            "chargerId": ChargerID,
+            "IOTID": IOTID,
+            "message": "IoT Details not found",
+            "data" : []
+        }
+      )
+    }
+  else {
+      return res.send(
+        { 
+            "statusCode": 200,
+            "chargerId": ChargerID,
+            "IOTID": IOTID,
+            "data" : iotDetails
+        }
+      )
+  }
+} else {
+    return res.send(
+        { 
+            "statusCode": 404,
+            "message": "Charger not found"
+        }
+    )
+  }
+});
+
 app.listen(9002, () => {
   console.log('API server is listening on port 9002')
 })
