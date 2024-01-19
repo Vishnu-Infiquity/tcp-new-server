@@ -341,7 +341,44 @@ app.post('/api/getChargerFaultDetails/', async (req, res, next) => {
     //const iotDetails = await IoTModel.find({"IOTID" : IOTID}, {"createdAt" : '2023-12-12T16:36:47.995+00:00'}).sort({_id: -1})
     //const iotDetails = await IoTModel.find({"IOTID" : IOTID , "createdAt" : '2024-01-18T14:21:36.461+00:00'}).sort({_id: -1})
 
-    const iotDetails = await IoTModel.find({ "IOTID" : IOTID , "createdAt" : { $gte: StartDateEpoc, $lt: EndDateEpoc } }).sort({_id: -1})
+    const iotDetails = await FaultModel.find({ 
+      "$or": [
+        {
+          "Phase_Det_01": '1'
+        }, 
+        {
+          "Phase_Det_02": "1"
+        },
+        {
+          "Feedback_Emerg_SW": "1"
+        },
+        {
+          "Feedback_Limit_SW": "1"
+        },
+        {
+          "Hooter_Feedback": "1"
+        },
+        {
+          "Aux_Feedback": "1"
+        },
+        {
+          "chargerStatus": "5"
+        },
+        {
+          "Ambient_temp" : "70"
+        },
+        {
+          "Panel_temp": "70"
+        },
+        {
+          "Alert_01_Modbus_failed": "1"
+        },
+        {
+          "Alert_02_Rs232_failed": "1"
+        }
+      ],
+    "IOTID" : IOTID,  
+    "createdAt" : { $gte: StartDateEpoc, $lt: EndDateEpoc } }, {"data" : 0}).sort({_id: -1})
 
     console.log('iotDetails count:')
     console.log(iotDetails.length)
