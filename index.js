@@ -3,6 +3,7 @@ const MongoClient = require('mongodb').MongoClient;
 const express = require('express');
 const router = express.Router();
 const IoTModel = require('./models/iotdetailsmodel');
+const FaultModel = require('./models/faultdetailsmodel');
 let Status = false;
 const db = require('./dbconfig/index');
 const env = require('dotenv');
@@ -424,6 +425,40 @@ try {
 
     const iotDataCount = split_string.length;
     console.log(`iotDataCount: ${iotDataCount}`)
+
+    if(iotDataCount == 24) {
+
+      const faultdata = new FaultModel({
+        data: input,
+        IOTID: split_string[0],
+        Phase_Det_01: split_string[1],
+        Phase_Det_02: split_string[2],
+        Feedback_Contactor: split_string[3],
+        Feedback_Emerg_SW: split_string[4],
+        Feedback_Limit_SW: split_string[5],
+        Hooter_Feedback: split_string[6],
+        Aux_Feedback: split_string[7],
+        Pin_Reserved: split_string[8],
+        chargerStatus: split_string[9],
+        charger_error_Status: split_string[10],
+        chargingVoltage: split_string[11],
+        chargingCurrent: split_string[12],
+        chargingTime: split_string[13],
+        chargingAh: split_string[14],
+        Ambient_temp: split_string[15],
+        Panel_temp: split_string[16],
+        RSSI_strength: split_string[17],
+        signalFire_Alarm: split_string[18],
+        Alert_01_Modbus_failed: split_string[19],
+        Alert_02_Rs232_failed: split_string[20],
+        Alert_03_Reserved: split_string[21],
+        Alert_04_Reserved: split_string[22],
+        Alert_05_Reserved: split_string[23]
+      })
+
+      const faultDataToSave = await faultdata.save();
+
+    }
 
     if(iotDataCount == 35) {
       const last6 = split_string.slice(-6);
