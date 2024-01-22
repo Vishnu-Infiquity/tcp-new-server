@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const IoTModel = require('./models/iotdetailsmodel');
 const FaultModel = require('./models/faultdetailsmodel');
+const FaultStatusModel = require('./models/faultstatusmodel');
 let Status = false;
 const db = require('./dbconfig/index');
 const env = require('dotenv');
@@ -495,6 +496,107 @@ try {
 
       const faultDataToSave = await faultdata.save();
 
+     /** Fault Status check*/
+      const value1 = split_string[1];
+      const value2 = split_string[2];
+      const value4 = split_string[4];
+      const value5 = split_string[5];
+      const value19 = split_string[19];
+      const value20 = split_string[20];
+      const value9 = split_string[9]; // which is greater than 4
+
+      const getiotFault = await FaultStatusModel.find({ IOTID: split_string[0], Status: 'OPEN'})
+      console.log('getiotFault Length:')
+      console.log(getiotFault.length)
+
+      if(getiotFault.length == 0) 
+      {
+          if(value1 == '1' || value2 == '1' || value4 == '1' || value5 == '1' || value19 == '1' || value20== '1' || value9 > '4' || value19 == '1' || value20 == '1' ) 
+          {
+            const currentTime = Date.now()
+            var timestamp = Math.round(currentTime/1000);
+
+            const faultStatusData = new FaultStatusModel({
+              data: input,
+              IOTID: split_string[0],
+              Phase_Det_01: split_string[1],
+              Phase_Det_02: split_string[2],
+              Feedback_Contactor: split_string[3],
+              Feedback_Emerg_SW: split_string[4],
+              Feedback_Limit_SW: split_string[5],
+              Hooter_Feedback: split_string[6],
+              Aux_Feedback: split_string[7],
+              Pin_Reserved: split_string[8],
+              chargerStatus: split_string[9],
+              charger_error_Status: split_string[10],
+              chargingVoltage: split_string[11],
+              chargingCurrent: split_string[12],
+              chargingTime: split_string[13],
+              chargingAh: split_string[14],
+              Ambient_temp: split_string[15],
+              Panel_temp: split_string[16],
+              RSSI_strength: split_string[17],
+              signalFire_Alarm: split_string[18],
+              Alert_01_Modbus_failed: split_string[19],
+              Alert_02_Rs232_failed: split_string[20],
+              Alert_03_Reserved: split_string[21],
+              Alert_04_Reserved: split_string[22],
+              Alert_05_Reserved: split_string[23],
+              Status: 'OPEN',
+              CreatedAt : timestamp,
+              UpdatedAt : timestamp
+            })
+
+            const faultStatusDataToSave = await faultStatusData.save();
+          }
+      
+      } else {
+
+        if(value1 == '0' && value2 == '0' && value4 == '0' && value5 == '0' && value19 == '0' && value20 == '0' && value9 <= '4')
+        {
+
+          const currentTime = Date.now()
+          var timestamp = Math.round(currentTime/1000);
+
+          const valueDetails = await faultStatusData.findOneAndUpdate({IOTID: split_string[0], Status: 'OPEN'},
+            {
+              $set:
+              {
+                data: input,
+                IOTID: split_string[0],
+                Phase_Det_01: split_string[1],
+                Phase_Det_02: split_string[2],
+                Feedback_Contactor: split_string[3],
+                Feedback_Emerg_SW: split_string[4],
+                Feedback_Limit_SW: split_string[5],
+                Hooter_Feedback: split_string[6],
+                Aux_Feedback: split_string[7],
+                Pin_Reserved: split_string[8],
+                chargerStatus: split_string[9],
+                charger_error_Status: split_string[10],
+                chargingVoltage: split_string[11],
+                chargingCurrent: split_string[12],
+                chargingTime: split_string[13],
+                chargingAh: split_string[14],
+                Ambient_temp: split_string[15],
+                Panel_temp: split_string[16],
+                RSSI_strength: split_string[17],
+                signalFire_Alarm: split_string[18],
+                Alert_01_Modbus_failed: split_string[19],
+                Alert_02_Rs232_failed: split_string[20],
+                Alert_03_Reserved: split_string[21],
+                Alert_04_Reserved: split_string[22],
+                Alert_05_Reserved: split_string[23],
+                Status : 'CLOSE',
+                UpdatedAt : timestamp
+              }
+            });
+        }
+
+      }
+      
+      
+      /** Fault Status check*/
     }
 
     if(iotDataCount == 35) {
