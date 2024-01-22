@@ -558,7 +558,7 @@ try {
           const currentTime = Date.now()
           var timestamp = Math.round(currentTime/1000);
 
-          const valueDetails = await faultStatusData.findOneAndUpdate({IOTID: split_string[0], Status: 'OPEN'},
+          const valueDetails = await FaultStatusModel.findOneAndUpdate({IOTID: split_string[0], Status: 'OPEN'},
             {
               $set:
               {
