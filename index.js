@@ -314,7 +314,7 @@ app.get('/api/getAllIoTDetails', async (req, res, next) => {
 });
 
 
-app.post('/api/getChargerFaultDetails/', async (req, res, next) => {
+/*app.post('/api/getChargerFaultDetails/', async (req, res, next) => {
   
   const { ChargerID, StartDate, EndDate } = req.body;
 
@@ -414,6 +414,7 @@ app.post('/api/getChargerFaultDetails/', async (req, res, next) => {
     )
   }
 });
+*/
 
 app.post('/api/getChargerFaultStatus/', async (req, res, next) => {
   
