@@ -497,6 +497,19 @@ app.post('/api/getChargerFaultStatus/', async (req, res, next) => {
         const CreatedAtTime = new Date(iotDetails[i].CreatedAt * 1000)
         const UpdatedAtTime = new Date(iotDetails[i].UpdatedAt * 1000)
 
+        var CreatedAtdate = new Date(iotDetails[i].CreatedAt * 1000);
+        console.log(CreatedAtdate);
+
+        const CreatedAtdateFormat = `${CreatedAtdate.getDate()}-${CreatedAtdate.getMonth()+1}-${CreatedAtdate.getFullYear()} ${CreatedAtdate.getHours()}:${CreatedAtdate.getHours()}:${CreatedAtdate.getSeconds()}`
+        console.log(CreatedAtdateFormat)
+
+        var UpdatedAtdate = new Date(iotDetails[i].UpdatedAt * 1000);
+        console.log(UpdatedAtdate);
+
+        const UpdatedAtdateFormat = `${UpdatedAtdate.getDate()}-${UpdatedAtdate.getMonth()+1}-${UpdatedAtdate.getFullYear()} ${UpdatedAtdate.getHours()}:${UpdatedAtdate.getHours()}:${UpdatedAtdate.getSeconds()}`
+        console.log(UpdatedAtdateFormat)
+
+
         tempData.push(
           {
               /*"_id" : iotDetails[i]._id,
@@ -525,8 +538,8 @@ app.post('/api/getChargerFaultStatus/', async (req, res, next) => {
               "Alert_04_Reserved" : iotDetails[i].Alert_04_Reserved,
               "Alert_05_Reserved" : iotDetails[i].Alert_05_Reserved,*/
               "Status" : iotDetails[i].Status,
-              "CreatedAt" : CreatedAtTime,
-              "UpdatedAt" : UpdatedAtTime
+              "CreatedAt" : CreatedAtdateFormat,
+              "UpdatedAt" : UpdatedAtdateFormat
           })
 
       }
