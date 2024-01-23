@@ -473,7 +473,7 @@ app.post('/api/getChargerFaultStatus/', async (req, res, next) => {
 
     console.log('iotDetails count:')
     console.log(iotDetails.length)
-    console.log(iotDetails)
+    //console.log(iotDetails)
 
     if (iotDetails.length == 0) {
       return res.send(
