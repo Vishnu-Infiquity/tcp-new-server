@@ -498,31 +498,31 @@ app.post('/api/getChargerFaultStatus/', async (req, res, next) => {
 
         tempData.push(
           {
-              "_id" : iotDetails[i]._id,
-              "IOTID" : iotDetails[i].IOTID,
+              /*"_id" : iotDetails[i]._id,
+              "IOTID" : iotDetails[i].IOTID,*/
               "Phase_Det_01" : iotDetails[i].Phase_Det_01,
               "Phase_Det_02" : iotDetails[i].Phase_Det_02,
-              "Feedback_Contactor" : iotDetails[i].Feedback_Contactor,
+              /*"Feedback_Contactor" : iotDetails[i].Feedback_Contactor,*/
               "Feedback_Emerg_SW" : iotDetails[i].Feedback_Emerg_SW,
               "Feedback_Limit_SW" : iotDetails[i].Feedback_Limit_SW,
               "Hooter_Feedback" : iotDetails[i].Hooter_Feedback,
               "Aux_Feedback" : iotDetails[i].Aux_Feedback,
-              "Pin_Reserved" : iotDetails[i].Pin_Reserved,
+              /*"Pin_Reserved" : iotDetails[i].Pin_Reserved,*/
               "chargerStatus" : iotDetails[i].chargerStatus,
               "charger_error_Status" : iotDetails[i].charger_error_Status,
-              "chargingVoltage" : iotDetails[i].chargingVoltage,
+              /*"chargingVoltage" : iotDetails[i].chargingVoltage,
               "chargingCurrent" : iotDetails[i].chargingCurrent,
               "chargingTime" : iotDetails[i].chargingTime,
-              "chargingAh" : iotDetails[i].chargingAh,
+              "chargingAh" : iotDetails[i].chargingAh,*/
               "Ambient_temp" : iotDetails[i].Ambient_temp,
               "Panel_temp" : iotDetails[i].Panel_temp,
               "RSSI_strength" : iotDetails[i].RSSI_strength,
               "signalFire_Alarm" : iotDetails[i].signalFire_Alarm,
               "Alert_01_Modbus_failed" : iotDetails[i].Alert_01_Modbus_failed,
               "Alert_02_Rs232_failed" : iotDetails[i].Alert_02_Rs232_failed,
-              "Alert_03_Reserved" : iotDetails[i].Alert_03_Reserved,
+              /*"Alert_03_Reserved" : iotDetails[i].Alert_03_Reserved,
               "Alert_04_Reserved" : iotDetails[i].Alert_04_Reserved,
-              "Alert_05_Reserved" : iotDetails[i].Alert_05_Reserved,
+              "Alert_05_Reserved" : iotDetails[i].Alert_05_Reserved,*/
               "Status" : iotDetails[i].Status,
               "CreatedAt" : CreatedAtTime,
               "UpdatedAt" : UpdatedAtTime
@@ -698,7 +698,7 @@ try {
             {
               $set:
               {
-                data: input,
+                /*data: input,
                 IOTID: split_string[0],
                 Phase_Det_01: split_string[1],
                 Phase_Det_02: split_string[2],
@@ -722,7 +722,7 @@ try {
                 Alert_02_Rs232_failed: split_string[20],
                 Alert_03_Reserved: split_string[21],
                 Alert_04_Reserved: split_string[22],
-                Alert_05_Reserved: split_string[23],
+                Alert_05_Reserved: split_string[23],*/
                 Status : 'CLOSE',
                 UpdatedAt : timestamp
               }
