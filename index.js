@@ -494,19 +494,22 @@ app.post('/api/getChargerFaultStatus/', async (req, res, next) => {
 
       for(i=0; i< iotDetails.length; i++) {
 
-        const CreatedAtTime = new Date(iotDetails[i].CreatedAt * 1000)
-        const UpdatedAtTime = new Date(iotDetails[i].UpdatedAt * 1000)
+        //const CreatedAtTime = new Date(iotDetails[i].CreatedAt * 1000)
+        //const UpdatedAtTime = new Date(iotDetails[i].UpdatedAt * 1000)
+
+        //console.log(iotDetails[i].CreatedAt)
+        //console.log(iotDetails[i].UpdatedAt)
 
         var CreatedAtdate = new Date(iotDetails[i].CreatedAt * 1000);
         console.log(CreatedAtdate);
 
-        const CreatedAtdateFormat = `${CreatedAtdate.getDate()}-${CreatedAtdate.getMonth()+1}-${CreatedAtdate.getFullYear()} ${CreatedAtdate.getHours()}:${CreatedAtdate.getHours()}:${CreatedAtdate.getSeconds()}`
+        const CreatedAtdateFormat = `${CreatedAtdate.getDate()}-${CreatedAtdate.getMonth()+1}-${CreatedAtdate.getFullYear()} ${CreatedAtdate.getHours()}:${CreatedAtdate.getMinutes()}:${CreatedAtdate.getSeconds()}`
         console.log(CreatedAtdateFormat)
 
         var UpdatedAtdate = new Date(iotDetails[i].UpdatedAt * 1000);
         console.log(UpdatedAtdate);
 
-        const UpdatedAtdateFormat = `${UpdatedAtdate.getDate()}-${UpdatedAtdate.getMonth()+1}-${UpdatedAtdate.getFullYear()} ${UpdatedAtdate.getHours()}:${UpdatedAtdate.getHours()}:${UpdatedAtdate.getSeconds()}`
+        const UpdatedAtdateFormat = `${UpdatedAtdate.getDate()}-${UpdatedAtdate.getMonth()+1}-${UpdatedAtdate.getFullYear()} ${UpdatedAtdate.getHours()}:${UpdatedAtdate.getMinutes()}:${UpdatedAtdate.getSeconds()}`
         console.log(UpdatedAtdateFormat)
 
 
