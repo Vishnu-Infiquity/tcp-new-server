@@ -928,7 +928,8 @@ try {
        
         /*-----*/
 
-      } else if(chargerStatus == 2 && contactorStatus == 0){
+      } //else if(chargerStatus == 2 && contactorStatus == 0){
+        else if(chargerStatus == 2){
         charger = 0
         
         LastpowerValue = powerConsumed;
