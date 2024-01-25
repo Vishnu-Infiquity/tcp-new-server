@@ -586,7 +586,6 @@ try {
     //console.log(BookingIdArray[0]);
     const BookingId = BookingIdArray[0];
     //console.log(BookingId);
-      
 
     const dataNew = String(input);
     const withoutFirstAndLast = dataNew.slice(1, -1);
@@ -808,6 +807,33 @@ try {
     if(charger == 1) {
       console.log(`charger on : ${charger}`)
 
+      var CurrentTimeseconds = Math.round(new Date() / 1000);
+      console.log(`CurrentTimeseconds - ${CurrentTimeseconds}`)
+
+      const getBookings = await db.pool.query(`SELECT * from public."Slots" WHERE "BookingId"='${BookingId}'`)
+      const BookingEndDate = getBookings.rows[0].BookingEndDate;
+      console.log(`BookingEndDateTime - ${BookingEndDate}`)
+
+      if(CurrentTimeseconds > BookingEndDate) {
+        console.log("Time's up")
+      } else {
+        console.log("charger is running...")
+      }
+
+      if(CurrentTimeseconds > BookingEndDate) {
+        charger =0 ;
+        console.log("Time's up")
+        chargerStatus = 3;
+        //socket.write('CHARGEROFF');
+        const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Completed' WHERE "Id" = ${BookingId}`)
+
+        const SlotRef = await db.pool.query(`UPDATE public."Slots" SET "ChargingStatus" = 'Completed' WHERE "BookingId" = ${BookingId}`)
+
+        Status = false;
+        //server.write('CHARGEROFF')
+      }
+
+
       if(iotDataCount == 35) {
         console.log(`powerConsumed: ${powerConsumed}`)
         console.log(`FirstpowerValue: ${FirstpowerValue}`)
@@ -890,35 +916,6 @@ try {
         const finalValue = (powerConsumed - FirstpowerValue) + PreviousPowerConsumed;
         console.log(`finalValue: ${finalValue}`)
        
-
-        var CurrentTimeseconds = Math.round(new Date() / 1000);
-
-        console.log(`CurrentTimeseconds - ${CurrentTimeseconds}`)
-
-        const getBookings = await db.pool.query(`SELECT * from public."Slots" WHERE "BookingId"='${BookingId}'`)
-        const BookingEndDate = getBookings.rows[0].BookingEndDate;
-
-        console.log(`BookingEndDateTime - ${BookingEndDate}`)
-
-        if(CurrentTimeseconds > BookingEndDate) {
-          console.log("Time's up")
-        } else {
-          console.log("charger is running...")
-        }
-
-        if(CurrentTimeseconds > BookingEndDate) {
-          charger =0 ;
-          console.log("Time's up")
-          chargerStatus = 3;
-          //socket.write('CHARGEROFF');
-          const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Completed' WHERE "Id" = ${BookingId}`)
-
-          const SlotRef = await db.pool.query(`UPDATE public."Slots" SET "ChargingStatus" = 'Completed' WHERE "BookingId" = ${BookingId}`)
-
-          Status = false;
-          //server.write('CHARGEROFF')
-        }
-        
         /*-----*/
 
       } else if(chargerStatus == 2 && contactorStatus == 0){
