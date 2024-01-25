@@ -614,6 +614,7 @@ try {
 
     const iotDataCount = split_string.length;
     console.log(`iotDataCount: ${iotDataCount}`)
+    var contactorStatus;
 
     if(iotDataCount == 24) {
 
@@ -655,6 +656,8 @@ try {
       const value19 = split_string[19];
       const value20 = split_string[20];
       const value9 = split_string[9]; // which is greater than 4
+      contactorStatus = split_string[3]; /* 1-ON, 0-OFF*/
+      
 
       const getiotFault = await FaultStatusModel.find({ IOTID: split_string[0], Status: 'OPEN'})
       console.log('getiotFault Length:')
@@ -766,7 +769,8 @@ try {
       const value19 = split_string[19];
       const value20 = split_string[20];
       const value9 = split_string[9]; // which is greater than 4
-      
+      contactorStatus = split_string[3];
+
       console.log(`Getteing values from IOT 5th value: ${value5}`)
 
       if(value1 == '1' || value2 == '1' || value4 == '1' || value5 == '1' || value19 == '1' || value20== '1' || value9 > '4' || value19 == '1' || value20 == '1' ) {
@@ -824,6 +828,7 @@ try {
       const value19 = split_string[19];
       const value20 = split_string[20];
       const value9 = split_string[9]; // which is greater than 4
+      contactorStatus = split_string[3]; /* 1-ON, 0-OFF*/
       
       console.log(`Getteing values from IOT 5th value: ${value5}`)
 
@@ -906,7 +911,7 @@ try {
         
         /*-----*/
 
-      } else if(chargerStatus == 2){
+      } else if(chargerStatus == 2 && contactorStatus == 0){
         charger = 0
         
         LastpowerValue = powerConsumed;
