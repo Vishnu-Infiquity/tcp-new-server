@@ -37,6 +37,9 @@ var errorCountStatus=0;
 
 var powerConsumed = 0; 
 
+var firstTime = 1;
+let PreviousPowerConsumed = 0;
+
 const server = net.createServer(socket => {
 
   const remoteAddress = socket.remoteAddress;
@@ -583,12 +586,7 @@ try {
     //console.log(BookingIdArray[0]);
     const BookingId = BookingIdArray[0];
     //console.log(BookingId);
-
-    let PreviousPowerConsumed = 0;
-    if (BookingId && typeof BookingId !== "undefined") {
-      const getPreviousPowerConsumed = await db.pool.query(`SELECT * from public."Bookings" WHERE "Id"='${BookingId}'`)
-      PreviousPowerConsumed= parseInt(getPreviousPowerConsumed.rows[0].PowerConsumed);
-    }
+      
 
     const dataNew = String(input);
     const withoutFirstAndLast = dataNew.slice(1, -1);
@@ -755,7 +753,6 @@ try {
     if(iotDataCount == 35) {
       const last6 = split_string.slice(-6);
       powerConsumed = last6[0]
-
       console.log(`Power consumend data: ${powerConsumed}`)
     }
     
@@ -776,7 +773,8 @@ try {
         errorCountStatus++;
         console.log(`errorCountStatus : ${errorCountStatus}`)
         if(errorCountStatus > 2) {
-
+          firstTime = 1;
+          PreviousPowerConsumed = 0;
           console.log(`powerConsumed: ${powerConsumed}`)
           console.log(`FirstpowerValue: ${FirstpowerValue}`)
           console.log(`PreviousPowerConsumed: ${PreviousPowerConsumed}`)
@@ -794,7 +792,7 @@ try {
         console.log(`powerConsumed: ${powerConsumed}`)
         console.log(`FirstpowerValue: ${FirstpowerValue}`)
         console.log(`PreviousPowerConsumed: ${PreviousPowerConsumed}`)
-        
+
         /** When fault - set chargers status to FALSE* */
         const getRef = await db.pool.query(`SELECT * FROM public."IoT" WHERE "IOTID" = '${IoTID}'`)
         const ChargerId = getRef.rows[0].ChargerId;
@@ -868,6 +866,14 @@ try {
   }
 
       if(chargerStatus == 1){
+
+        if (BookingId && typeof BookingId !== "undefined") {
+          const getPreviousPowerConsumed = await db.pool.query(`SELECT * from public."Bookings" WHERE "Id"='${BookingId}'`)
+          PreviousPowerConsumed= parseInt(getPreviousPowerConsumed.rows[0].PowerConsumed);
+        } else {
+          PreviousPowerConsumed= 0;
+        }
+
         charger = 1
         chargerStatus = 3;
         FirstpowerValue = powerConsumed;
@@ -902,6 +908,7 @@ try {
 
       } else if(chargerStatus == 2){
         charger = 0
+        
         LastpowerValue = powerConsumed;
         console.log(`FirstpowerValue: ${FirstpowerValue}`)
 
@@ -921,6 +928,9 @@ try {
           const SlotRef = await db.pool.query(`UPDATE public."Slots" SET "ChargingStatus" = 'Completed' WHERE "BookingId" = ${BookingId}`)
           //socket.write('CHARGEROFF');
         }
+
+        firstTime = 1;
+        PreviousPowerConsumed = 0;
       }
 }
 catch (error) {
