@@ -755,6 +755,8 @@ try {
     if(iotDataCount == 35) {
       const last6 = split_string.slice(-6);
       powerConsumed = last6[0]
+
+      console.log(`Power consumend data: ${powerConsumed}`)
     }
     
     if(iotDataCount == 24) {
@@ -859,7 +861,7 @@ try {
         
         /*-----*/
 
-        const finalValue = (powerConsumed - FirstpowerValue) + PreviousPowerConsumed;
+        const finalValue = (powenrCosumed - FirstpowerValue) + PreviousPowerConsumed;
         //console.log(`finalValue: ${finalValue}`)
        
 
@@ -886,7 +888,9 @@ try {
       } else if(chargerStatus == 2){
         charger = 0
         LastpowerValue = powerConsumed;
-        //console.log(`LastpowerValue: ${LastpowerValue}`)
+        console.log(`LastpowerValue: ${LastpowerValue}`)
+
+
         chargerStatus = 3;
         const finalValue = (LastpowerValue -  FirstpowerValue ) + PreviousPowerConsumed
         //console.log(`Final Value: ${finalValue}`)
