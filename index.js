@@ -777,6 +777,10 @@ try {
         console.log(`errorCountStatus : ${errorCountStatus}`)
         if(errorCountStatus > 2) {
 
+          console.log(`powerConsumed: ${powerConsumed}`)
+          console.log(`FirstpowerValue: ${FirstpowerValue}`)
+          console.log(`PreviousPowerConsumed: ${PreviousPowerConsumed}`)
+
           /** When fault - set chargers status to FALSE* */
           const getRef = await db.pool.query(`SELECT * FROM public."IoT" WHERE "IOTID" = '${IoTID}'`)
           const ChargerId = getRef.rows[0].ChargerId;
@@ -786,6 +790,11 @@ try {
         }
       } else {
         errorCountStatus = 0; 
+
+        console.log(`powerConsumed: ${powerConsumed}`)
+        console.log(`FirstpowerValue: ${FirstpowerValue}`)
+        console.log(`PreviousPowerConsumed: ${PreviousPowerConsumed}`)
+        
         /** When fault - set chargers status to FALSE* */
         const getRef = await db.pool.query(`SELECT * FROM public."IoT" WHERE "IOTID" = '${IoTID}'`)
         const ChargerId = getRef.rows[0].ChargerId;
@@ -798,6 +807,10 @@ try {
       console.log(`charger on : ${charger}`)
 
       if(iotDataCount == 35) {
+        console.log(`powerConsumed: ${powerConsumed}`)
+        console.log(`FirstpowerValue: ${FirstpowerValue}`)
+        console.log(`PreviousPowerConsumed: ${PreviousPowerConsumed}`)
+
         const finalValue = (powerConsumed -  FirstpowerValue ) + PreviousPowerConsumed
         const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Charging' WHERE "Id" = ${BookingId}`)
         const SlotRef = await db.pool.query(`UPDATE public."Slots" SET "ChargingStatus" = 'Charging' WHERE "BookingId" = ${BookingId}`)
@@ -860,9 +873,11 @@ try {
         FirstpowerValue = powerConsumed;
         
         /*-----*/
-
-        const finalValue = (powenrCosumed - FirstpowerValue) + PreviousPowerConsumed;
-        //console.log(`finalValue: ${finalValue}`)
+        console.log(`powerConsumed: ${powerConsumed}`)
+        console.log(`FirstpowerValue: ${FirstpowerValue}`)
+        console.log(`PreviousPowerConsumed: ${PreviousPowerConsumed}`)
+        const finalValue = (powerConsumed - FirstpowerValue) + PreviousPowerConsumed;
+        console.log(`finalValue: ${finalValue}`)
        
 
         var CurrentTimeseconds = Math.round(new Date() / 1000);
@@ -888,12 +903,17 @@ try {
       } else if(chargerStatus == 2){
         charger = 0
         LastpowerValue = powerConsumed;
+        console.log(`FirstpowerValue: ${FirstpowerValue}`)
+
         console.log(`LastpowerValue: ${LastpowerValue}`)
+
+        console.log(`PreviousPowerConsumed: ${PreviousPowerConsumed}`)
 
 
         chargerStatus = 3;
         const finalValue = (LastpowerValue -  FirstpowerValue ) + PreviousPowerConsumed
-        //console.log(`Final Value: ${finalValue}`)
+        console.log(`Final Value after calculation: ${finalValue}`)
+
         if(finalValue > 0) {
 
            const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Completed' WHERE "Id" = ${BookingId}`)
