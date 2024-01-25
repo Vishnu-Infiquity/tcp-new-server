@@ -825,6 +825,13 @@ try {
         console.log("Time's up")
         chargerStatus = 3;
         //socket.write('CHARGEROFF');
+
+        console.log(`powerConsumed: ${powerConsumed}`)
+        console.log(`FirstpowerValue: ${FirstpowerValue}`)
+        console.log(`PreviousPowerConsumed: ${PreviousPowerConsumed}`)
+
+        const finalValue = (powerConsumed -  FirstpowerValue ) + PreviousPowerConsumed
+        
         const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Completed' WHERE "Id" = ${BookingId}`)
 
         const SlotRef = await db.pool.query(`UPDATE public."Slots" SET "ChargingStatus" = 'Completed' WHERE "BookingId" = ${BookingId}`)
