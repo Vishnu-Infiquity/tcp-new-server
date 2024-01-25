@@ -807,6 +807,7 @@ try {
     if(charger == 1) {
       console.log(`charger on : ${charger}`)
 
+      /* Checking timeup condition Starts*/
       var CurrentTimeseconds = Math.round(new Date() / 1000);
       console.log(`CurrentTimeseconds - ${CurrentTimeseconds}`)
 
@@ -821,25 +822,27 @@ try {
       }
 
       if(CurrentTimeseconds > BookingEndDate) {
-        charger =0 ;
-        console.log("Time's up")
-        chargerStatus = 3;
-        //socket.write('CHARGEROFF');
-
+        
         console.log(`powerConsumed: ${powerConsumed}`)
         console.log(`FirstpowerValue: ${FirstpowerValue}`)
         console.log(`PreviousPowerConsumed: ${PreviousPowerConsumed}`)
 
         const finalValue = (powerConsumed -  FirstpowerValue ) + PreviousPowerConsumed
-        
+        console.log(`finalValue: ${finalValue}`)
+        console.log(`BookingId: ${BookingId}`)
+
         const BookingsRef = await db.pool.query(`UPDATE public."Bookings" SET "PowerConsumed" = ${finalValue}, "ChargingStatus" = 'Completed' WHERE "Id" = ${BookingId}`)
 
         const SlotRef = await db.pool.query(`UPDATE public."Slots" SET "ChargingStatus" = 'Completed' WHERE "BookingId" = ${BookingId}`)
 
+        charger = 0 ;
+        console.log("Time's up")
+        chargerStatus = 3;
+        
         Status = false;
         //server.write('CHARGEROFF')
       }
-
+      /* Checking timeup condition ends*/
 
       if(iotDataCount == 35) {
         console.log(`powerConsumed: ${powerConsumed}`)
