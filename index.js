@@ -893,8 +893,18 @@ try {
 
         var CurrentTimeseconds = Math.round(new Date() / 1000);
 
+        console.log(`CurrentTimeseconds - ${CurrentTimeseconds}`)
+
         const getBookings = await db.pool.query(`SELECT * from public."Slots" WHERE "BookingId"='${BookingId}'`)
         const BookingEndDate = getBookings.rows[0].BookingEndDate;
+
+        console.log(`BookingEndDateTime - ${BookingEndDate}`)
+
+        if(CurrentTimeseconds > BookingEndDate) {
+          console.log("Time's up")
+        } else {
+          console.log("charger is running...")
+        }
 
         if(CurrentTimeseconds > BookingEndDate) {
           charger =0 ;
